@@ -48,12 +48,13 @@ class ScrollChecker {
         this.container = document.querySelector('.container')
         this.gS = new GenerateSquare()
         this.iC = new ImageCollection()
-        this.x = 1;
-        this.y = 5;
+        this.rowAmount = 1;
+        this.squareAmount = 5;
     }
 
     initialize() {
         this.appendCheckerToContainer(this.generateCheckElement())
+        this.generateMoreSquares()
     }
 
     generateCheckElement() {
@@ -74,10 +75,10 @@ class ScrollChecker {
     generateMoreSquares() {
         if(this.countSquares() < this.setImageLimit()) {
             if(this.setImageLimit() - this.countSquares() > 5) {
-                this.gS.generateAll(this.x, this.y)
+                this.gS.generateAll(this.rowAmount, this.squareAmount)
             } else {
-                this.y = this.setImageLimit() - this.countSquares()
-                this.gS.generateAll(this.x, this.y)
+                this.squareAmount = this.setImageLimit() - this.countSquares()
+                this.gS.generateAll(this.rowAmount, this.squareAmount)
             }
         }
         this.iC.initialize(this.countSquares())
@@ -88,38 +89,35 @@ class ScrollChecker {
     }
 
     setImageLimit() {
-        return 37;
+        return 18;
     }
 
 }
 
 class ImageCollection {
+
     constructor() {
-        this.max = 0
+        this.currentAmountOfImages = 0
     }
 
-    initialize(max) {
-        for(let i = this.max; i < max; i++) {
-            this.getImage(i)
+    initialize(imageAddAmount) {
+        for(let iIx = this.currentAmountOfImages; iIx < imageAddAmount; iIx++) {
+            this.getImages(iIx)
         }
-        this.max = max
+        this.currentAmountOfImages = imageAddAmount
     }
 
-    getImage(ix) {
-        let squareImage = document.querySelectorAll('.square')[ix]
+    getImages(squareIndex) {
+        let squareImage = document.querySelectorAll('.square')[squareIndex]
 
         fetch('https://unsplash.it/500/500/?random')
-            .then(e => e.blob())
-            .then(blob => URL.createObjectURL(blob))
-            .then(final => squareImage.style.backgroundImage = 'url(' + final + ')')
+            .then(response => response.blob())
+            .then(blobOfInformation => URL.createObjectURL(blobOfInformation))
+            .then(finalResponse => squareImage.style.backgroundImage = 'url(' + finalResponse + ')')
             .catch(error => console.log(error))
     }
 
 }
 
-/**
- * @param {int} Rows
- * @param {int} Squares per Row
- */
 const sC = new ScrollChecker()
 sC.initialize()
