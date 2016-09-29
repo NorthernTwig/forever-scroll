@@ -47,6 +47,7 @@ class ScrollChecker {
     constructor() {
         this.container = document.querySelector('.container')
         this.gS = new GenerateSquare()
+        this.iC = new ImageCollection()
         this.x = 1;
         this.y = 5;
     }
@@ -79,7 +80,7 @@ class ScrollChecker {
                 this.gS.generateAll(this.x, this.y)
             }
         }
-        this.countSquares()
+        this.iC.initialize(this.countSquares())
     }
 
     appendCheckerToContainer(checker) {
@@ -93,21 +94,26 @@ class ScrollChecker {
 }
 
 class ImageCollection {
-  constructor() {
-    this.getImage()
-  }
+    constructor() {
+        this.max = 0
+    }
 
-  pushSrcIntoArray() {
-    
-  }
+    initialize(max) {
+        for(let i = this.max; i < max; i++) {
+            this.getImage(i)
+        }
+        this.max = max
+    }
 
-  getImage() {
-    fetch('https://unsplash.it/500/500/?random')
-    .then(e => e.blob())
-    .then(blob => URL.createObjectURL(blob))
-    .then(final => final)
-    .catch(error => console.log(error))
-  }
+    getImage(ix) {
+        let squareImage = document.querySelectorAll('.square')[ix]
+
+        fetch('https://unsplash.it/500/500/?random')
+            .then(e => e.blob())
+            .then(blob => URL.createObjectURL(blob))
+            .then(final => squareImage.style.backgroundImage = 'url(' + final + ')')
+            .catch(error => console.log(error))
+    }
 
 }
 
@@ -116,5 +122,4 @@ class ImageCollection {
  * @param {int} Squares per Row
  */
 const sC = new ScrollChecker()
-const iC = new ImageCollection()
 sC.initialize()
