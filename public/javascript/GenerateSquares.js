@@ -1,5 +1,6 @@
 'use strict'
 
+// Github: https://github.com/NorthernTwig/forever-scroll
 
 class GenerateSquare {
 
@@ -51,11 +52,13 @@ class ScrollChecker {
         this.iC = new ImageCollection()
         this.rowAmount = 1
         this.squareAmount = 3
-        this.pre = 2
+        this.pre = 3
+        this.imageAmountLimit = 25
     }
 
-    initialize(squaresPerRow) {
+    initialize(squaresPerRow, imageAmountLimit) {
         this.squareAmount = squaresPerRow
+        this.imageAmountLimit = imageAmountLimit
 
         this.initializeListener()
         for(let i = 0; i < this.pre; i++) {
@@ -77,7 +80,7 @@ class ScrollChecker {
 
     generateMoreSquares() {
         if(this.countSquares() < this.setImageLimit()) {
-            if(this.setImageLimit() - this.countSquares() > 3) {
+            if(this.setImageLimit() - this.countSquares() > this.squareAmount) {
                 if(this.getPositionBottomSquare() < this.getBottomPosition()) {
                     this.gS.generateAll(this.rowAmount, this.squareAmount)
                 }
@@ -103,7 +106,7 @@ class ScrollChecker {
     }
 
     setImageLimit() {
-        return 50;
+        return this.imageAmountLimit;
     }
 
 }
@@ -138,11 +141,17 @@ class ImageCollection {
 
 class Initializer {
 
-    constructor(squaresPerRow) {
+    constructor(squaresPerRow, imageAmountLimit) {
         const sC = new ScrollChecker()
-        sC.initialize(squaresPerRow)
+        sC.initialize(squaresPerRow, imageAmountLimit)
     }
 
 }
 
-const init = new Initializer(5)
+/**
+ * Initializes the Forever Scroll
+ * @constructor
+ * @param {int} - Squares per row.
+ * @param {int}  - The amount of images that should be loaded.
+ */
+const init = new Initializer(5, 2000)

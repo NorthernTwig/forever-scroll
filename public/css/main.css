@@ -17,6 +17,8 @@
 }
 
 .square {
+
+    /* Standard image square, hidden before image is loaded */
     width: 100%;
     height: 500px;
     border-radius: 2px;
@@ -28,6 +30,8 @@
 }
 
 .display {
+
+  /* When the image has been loaded */
   opacity: 1;
 }
 
