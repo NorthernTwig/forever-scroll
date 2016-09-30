@@ -42,6 +42,7 @@ class GenerateSquare {
             this.appendRowToContainer(row)
         }
     }
+    
 }
 
 class ScrollChecker {
