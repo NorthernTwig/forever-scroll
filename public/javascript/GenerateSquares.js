@@ -46,10 +46,10 @@ class GenerateSquare {
 
 class ScrollChecker {
 
-    constructor() {
+    constructor(link) {
         this.container = document.querySelector('.container')
         this.gS = new GenerateSquare()
-        this.iC = new ImageCollection()
+        this.iC = new ImageCollection(link)
         this.rowAmount = 1
         this.squareAmount = 3
         this.pre = 3
@@ -113,7 +113,8 @@ class ScrollChecker {
 
 class ImageCollection {
 
-    constructor() {
+    constructor(link) {
+        this.link = link
         this.currentAmountOfImages = 0
     }
 
@@ -127,7 +128,8 @@ class ImageCollection {
     getImages(squareIndex) {
         let squareImage = document.querySelectorAll('.square')[squareIndex]
 
-        fetch('https://unsplash.it/450/450/?random')
+        // Adjust for your needs.
+        fetch(this.link)
             .then(response => response.blob())
             .then(blobOfInformation => URL.createObjectURL(blobOfInformation))
             .then(imageURL => {
@@ -135,14 +137,16 @@ class ImageCollection {
                 squareImage.classList.add('display')
             })
             .catch(error => console.log(error))
+
+
     }
 
 }
 
 class Initializer {
 
-    constructor(squaresPerRow, imageAmountLimit) {
-        const sC = new ScrollChecker()
+    constructor(squaresPerRow, imageAmountLimit, link) {
+        const sC = new ScrollChecker(link)
         sC.initialize(squaresPerRow, imageAmountLimit)
     }
 
@@ -153,5 +157,6 @@ class Initializer {
  * @constructor
  * @param {int} - Squares per row.
  * @param {int}  - The amount of images that should be loaded.
+ * @param {string}  - Where to get the images (Only fetches one).
  */
-const init = new Initializer(5, 2000)
+const init = new Initializer(5, 2000, 'https://unsplash.it/450/450/?random')
