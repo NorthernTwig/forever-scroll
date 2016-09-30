@@ -71,11 +71,11 @@ class ScrollChecker {
     }
 
     countSquares() {
-        let count = 0;
+        let count = 0
         for(let i = 0; i < this.container.children.length; i++) {
             count += this.container.children[i].children.length
         }
-        return count;
+        return count
     }
 
     generateMoreSquares() {
@@ -106,7 +106,7 @@ class ScrollChecker {
     }
 
     setImageLimit() {
-        return this.imageAmountLimit;
+        return this.imageAmountLimit
     }
 
 }
