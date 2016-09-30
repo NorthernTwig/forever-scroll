@@ -48,20 +48,19 @@ class ScrollChecker {
         this.container = document.querySelector('.container')
         this.gS = new GenerateSquare()
         this.iC = new ImageCollection()
-        this.rowAmount = 1;
-        this.squareAmount = 5;
+        this.rowAmount = 1
+        this.squareAmount = 3
     }
 
     initialize() {
-        this.appendCheckerToContainer(this.generateCheckElement())
+        this.generateCheckElement()
+        this.generateMoreSquares()
+        this.generateMoreSquares()
         this.generateMoreSquares()
     }
 
     generateCheckElement() {
-        let checker = document.createElement('div')
-        checker.classList.add('checker')
-        checker.addEventListener('click', this.generateMoreSquares.bind(this))
-        return checker
+        this.container.addEventListener('scroll', this.generateMoreSquares.bind(this))
     }
 
     countSquares() {
@@ -75,7 +74,9 @@ class ScrollChecker {
     generateMoreSquares() {
         if(this.countSquares() < this.setImageLimit()) {
             if(this.setImageLimit() - this.countSquares() > 5) {
+              if (this.getPositionBottomSquare() < this.getBottomPosition()) {
                 this.gS.generateAll(this.rowAmount, this.squareAmount)
+              }
             } else {
                 this.squareAmount = this.setImageLimit() - this.countSquares()
                 this.gS.generateAll(this.rowAmount, this.squareAmount)
@@ -84,12 +85,21 @@ class ScrollChecker {
         this.iC.initialize(this.countSquares())
     }
 
-    appendCheckerToContainer(checker) {
-        this.container.appendChild(checker)
+    getPositionBottomSquare() {
+      let squares = document.querySelectorAll('.square')
+      if (this.countSquares() > 0) {
+        return squares[squares.length - 1].offsetTop + squares[squares.length - 1].clientHeight - 200
+      } else {
+        return 0
+      }
+    }
+
+    getBottomPosition() {
+      return this.container.scrollTop + screen.height
     }
 
     setImageLimit() {
-        return 18;
+        return 50;
     }
 
 }
@@ -110,10 +120,13 @@ class ImageCollection {
     getImages(squareIndex) {
         let squareImage = document.querySelectorAll('.square')[squareIndex]
 
-        fetch('https://unsplash.it/500/500/?random')
+        fetch('https://unsplash.it/450/450/?random')
             .then(response => response.blob())
             .then(blobOfInformation => URL.createObjectURL(blobOfInformation))
-            .then(finalResponse => squareImage.style.backgroundImage = 'url(' + finalResponse + ')')
+            .then(finalResponse => {
+              squareImage.style.backgroundImage = 'url(' + finalResponse + ')'
+              squareImage.classList.add('display')
+            })
             .catch(error => console.log(error))
     }
 
